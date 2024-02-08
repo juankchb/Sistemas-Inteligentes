@@ -1,4 +1,5 @@
 # Sistemas-Inteligentes
 Proyecto Final Sistemas Inteligentes
 ## Bienvenido
-sadadw
+Juan Camilo Fernandez
+Luis Torres
