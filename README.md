@@ -4,3 +4,5 @@ Proyecto Final Sistemas Inteligentes
 Juan Camilo Fernandez
 
 Luis Torres
+
+Brayan Agray
