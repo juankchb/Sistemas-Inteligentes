@@ -6,3 +6,5 @@ Juan Camilo Fernandez
 Luis Torres
 
 Brayan Agray
+
+Juan Caicedo
