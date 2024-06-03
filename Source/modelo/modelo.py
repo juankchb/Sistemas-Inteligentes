@@ -12,26 +12,47 @@ class GrafoModelo:
         self.cargar_datos()
 
     def cargar_datos(self):
+        print("Loading data into the graph...")
         if isinstance(self.data, pd.DataFrame):
-            self.nodos = self.data[['id', 'speed', 'travel_time']].drop_duplicates()
-            self.aristas = self.data[['id', 'link_id', 'speed']].drop_duplicates()
+            print("Data is a valid DataFrame.")
+            print(f"Data columns: {self.data.columns}")
+            print(f"Data sample:\n{self.data.head()}")
+
+            try:
+                self.nodos = self.data[['id']].drop_duplicates()
+                self.aristas = self.data[['id', 'link_id', 'speed', 'travel_time', 'status']].drop_duplicates()
+                print("Nodes data prepared:")
+                print(self.nodos.head())
+                print("Edges data prepared:")
+                print(self.aristas.head())
+            except KeyError as e:
+                print(f"KeyError: {e}")
+                raise ValueError("The DataFrame does not contain the required columns.")
         else:
             raise ValueError("Debe proporcionar un DataFrame válido.")
-
+        
         self.grafo = nx.DiGraph()
         
+        print("Adding nodes to the graph...")
         for _, row in self.nodos.iterrows():
-            self.grafo.add_node(row['id'], speed=row['speed'], travel_time=row['travel_time'])
-
+            self.grafo.add_node(row['id'])
+        print("Nodes added successfully.")
+        
+        print("Adding edges to the graph...")
         for _, row in self.aristas.iterrows():
             self.grafo.add_edge(row['id'], row['link_id'], weight=row['speed'])
+        print("Edges added successfully.")
+        print("Graph created successfully.")
 
     def obtener_camino_mas_corto(self, inicio, fin):
+        print(f"Finding shortest path from {inicio} to {fin}...")
         camino = nx.shortest_path(self.grafo, source=inicio, target=fin, weight='weight')
         longitud = nx.shortest_path_length(self.grafo, source=inicio, target=fin, weight='weight')
+        print("Shortest path found successfully.")
         return camino, longitud
     
     def bee_algorithm(self, start_node, end_node, num_bees=50, num_iterations=100):
+        print("Running bee algorithm...")
         best_path = None
         best_path_length = float('inf')
 
@@ -67,6 +88,7 @@ class GrafoModelo:
                         if 'traffic' in self.grafo[u][v]:
                             self.grafo[u][v]['traffic'] += 1
 
+        print("Bee algorithm completed.")
         return best_path, best_path_length
 
     def coords_to_node(self, coords):
